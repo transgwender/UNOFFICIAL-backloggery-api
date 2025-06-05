@@ -1,5 +1,5 @@
 [project]
-name = "backloggery-unofficial"
+name = "backloggery"
 description = "An unofficial Python wrapper for the backloggery website"
 readme = "README.md"
 requires-python = ">=3.13"
