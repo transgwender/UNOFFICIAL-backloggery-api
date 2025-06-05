@@ -1,0 +1,13 @@
+[project]
+name = "backloggery-unofficial"
+description = "An unofficial Python wrapper for the backloggery website"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [
+  {name = "Gwendolyn Kornak", email = "gwen@gwenkornak.ca"},
+]
+dynamic = ["version"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
