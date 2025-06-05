@@ -73,7 +73,7 @@ def fetch(username: str) -> GameCache:
     return gc
 
 
-class Client:
+class BacklogClient:
     def __init__(self) -> None:
         self.cache: Dict[str, GameCache] = {}
 

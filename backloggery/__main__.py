@@ -1,7 +1,7 @@
 import backloggery
 
 def main() -> None:
-    client = backloggery.Client()
+    client = backloggery.BacklogClient()
     client.get("Drumble")
     client.get("transgwender")
     pass
