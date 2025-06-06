@@ -94,12 +94,15 @@ class BacklogClient:
     def __init__(self) -> None:
         self.cache: Dict[str, GameCache] = {}
 
+    def refresh_cache(self, username: str) -> None:
+        fet = fetch(username)
+        if isinstance(fet, HTTPError):
+            raise fet
+        self.cache[username] = fet
+
     def get_library(self, username: str) -> GameCache:
         if username not in self.cache:
-            fet = fetch(username)
-            if isinstance(fet, HTTPError):
-                raise fet
-            self.cache[username] = fet
+            self.refresh_cache(username)
         return self.cache[username]
 
     def search_library(self, username: str, search_regex: str, partial_match: bool = False) -> List[Game]:

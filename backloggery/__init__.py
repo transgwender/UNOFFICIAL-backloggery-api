@@ -5,7 +5,7 @@ Unofficial Backloggery API Wrapper
 __title__ = 'backloggery'
 __author__ = 'transgwender'
 __license__ = 'MIT'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __status__ = 'Development'
 
 import logging
