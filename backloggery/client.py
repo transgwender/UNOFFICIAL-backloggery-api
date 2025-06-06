@@ -55,12 +55,12 @@ class Game:
         self.title: str = options.get('title')
 
     def compare_any(self, **options: Any) -> bool:
-        l = [re.match(options.get(c), getattr(self, c)) for c in options]
+        l = [hasattr(self, c) and re.match(options.get(c), getattr(self, c)) for c in options]
         r = any(l)
         return r
 
     def compare_all(self, **options: Any) -> bool:
-        l = [re.match(options.get(c), getattr(self, c)) for c in options]
+        l = [hasattr(self, c) and re.match(options.get(c), getattr(self, c)) for c in options]
         r = all(l)
         return r
 
@@ -92,7 +92,10 @@ class BacklogClient:
             self.cache[username] = fetch(username)
         return self.cache[username]
 
-    def search_library(self, username: str, search_regex: str) -> List[Game]:
+    def search_library(self, username: str, search_regex: str, partial_match: bool = False) -> List[Game]:
         regex = json.loads(search_regex)
         lib = self.get_library(username)
-        return [g for g in lib.data if g.compare_any(**regex)]
+        if partial_match:
+            return [g for g in lib.data if g.compare_any(**regex)]
+        else:
+            return [g for g in lib.data if g.compare_all(**regex)]
