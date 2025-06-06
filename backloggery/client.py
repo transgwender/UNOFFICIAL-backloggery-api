@@ -24,16 +24,11 @@ DEALINGS IN THE SOFTWARE.
 
 import datetime
 import json
-from typing import Dict, Any, Optional
+import re
+from typing import Dict, Any, Optional, List
 from urllib import request
 
 import backloggery
-
-
-class GameCache:
-    def __init__(self, time: datetime.datetime, data: Any):
-        self.time = time
-        self.data = data
 
 class Game:
     def __init__(self, **options: Any):
@@ -59,6 +54,11 @@ class Game:
         self.sub_platform_title: Optional[str] = options.get('sub_platform_title')
         self.title: str = options.get('title')
 
+class GameCache:
+    def __init__(self, time: datetime.datetime, data: List[Game]):
+        self.time = time
+        self.data = data
+
 def fetch(username: str) -> GameCache:
     data = {'type': "load_user_library", 'username': username}
     data = json.dumps(data).encode('utf-8')
@@ -77,7 +77,11 @@ class BacklogClient:
     def __init__(self) -> None:
         self.cache: Dict[str, GameCache] = {}
 
-    def get(self, username: str) -> GameCache:
+    def get_library(self, username: str) -> GameCache:
         if username not in self.cache:
             self.cache[username] = fetch(username)
         return self.cache[username]
+
+    def search_library(self, username: str, title_regex: str) -> List[Game]:
+        lib = self.get_library(username)
+        return [g for g in lib.data if re.search(title_regex, g.title)]
