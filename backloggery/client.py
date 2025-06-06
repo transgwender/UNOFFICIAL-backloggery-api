@@ -27,6 +27,7 @@ import json
 import re
 from typing import Dict, Any, Optional, List
 from urllib import request
+from urllib.error import HTTPError
 
 import backloggery
 
@@ -69,7 +70,7 @@ class GameCache:
         self.time = time
         self.data = data
 
-def fetch(username: str) -> GameCache:
+def fetch(username: str) -> HTTPError | GameCache:
     data = {'type': "load_user_library", 'username': username}
     data = json.dumps(data).encode('utf-8')
     req = request.Request("https://backloggery.com/api/fetch_library.php", data=data)
@@ -77,8 +78,14 @@ def fetch(username: str) -> GameCache:
     req.add_header('Accept', 'application/json')
     req.add_header('User-Agent', f'Backloggery Unofficial API Client/{backloggery.__version__} (dev[at]gwenkornak.ca)')
     # req.add_header('If-Modified-Since', 'Thu, 05 Jun 2025 04:14:34 GMT')
-    resp = request.urlopen(req)
-    result = json.loads(resp.read().decode('utf-8'))['payload']
+    try:
+        resp = request.urlopen(req)
+    except HTTPError as err:
+        return err
+    decoded = json.loads(resp.read().decode('utf-8'))
+    if not decoded:
+        return HTTPError(resp.url, 404, f'No Data Found for {username}', resp.headers, resp.fp)
+    result = decoded['payload']
     gc = GameCache(datetime.datetime.now(), [Game(**dct) for dct in result])
     return gc
 
@@ -89,7 +96,10 @@ class BacklogClient:
 
     def get_library(self, username: str) -> GameCache:
         if username not in self.cache:
-            self.cache[username] = fetch(username)
+            fet = fetch(username)
+            if type(fet) is HTTPError:
+                raise fet
+            self.cache[username] = fet
         return self.cache[username]
 
     def search_library(self, username: str, search_regex: str, partial_match: bool = False) -> List[Game]:
