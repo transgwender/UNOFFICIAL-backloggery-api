@@ -97,7 +97,7 @@ class BacklogClient:
     def get_library(self, username: str) -> GameCache:
         if username not in self.cache:
             fet = fetch(username)
-            if type(fet) is HTTPError:
+            if isinstance(fet, HTTPError):
                 raise fet
             self.cache[username] = fet
         return self.cache[username]
