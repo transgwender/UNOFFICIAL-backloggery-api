@@ -54,6 +54,16 @@ class Game:
         self.sub_platform_title: Optional[str] = options.get('sub_platform_title')
         self.title: str = options.get('title')
 
+    def compare_any(self, **options: Any) -> bool:
+        l = [re.match(options.get(c), getattr(self, c)) for c in options]
+        r = any(l)
+        return r
+
+    def compare_all(self, **options: Any) -> bool:
+        l = [re.match(options.get(c), getattr(self, c)) for c in options]
+        r = all(l)
+        return r
+
 class GameCache:
     def __init__(self, time: datetime.datetime, data: List[Game]):
         self.time = time
@@ -82,6 +92,7 @@ class BacklogClient:
             self.cache[username] = fetch(username)
         return self.cache[username]
 
-    def search_library(self, username: str, title_regex: str) -> List[Game]:
+    def search_library(self, username: str, search_regex: str) -> List[Game]:
+        regex = json.loads(search_regex)
         lib = self.get_library(username)
-        return [g for g in lib.data if re.search(title_regex, g.title)]
+        return [g for g in lib.data if g.compare_any(**regex)]
