@@ -7,6 +7,9 @@ authors = [
   {name = "Gwendolyn Kornak", email = "gwen@gwenkornak.ca"},
 ]
 dynamic = ["version"]
+dependencies = [
+    "hatchling>=1.27.0",
+]
 
 [build-system]
 requires = ["hatchling"]
