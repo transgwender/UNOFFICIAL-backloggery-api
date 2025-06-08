@@ -55,6 +55,9 @@ class Game:
         self.sub_platform_title: Optional[str] = options.get('sub_platform_title')
         self.title: str = options.get('title')
 
+    def __str__(self) -> str:
+        return str(self.__dict__)
+
     def compare_any(self, **options: Any) -> bool:
         l = [hasattr(self, c) and re.match(options.get(c), getattr(self, c)) for c in options]
         r = any(l)
