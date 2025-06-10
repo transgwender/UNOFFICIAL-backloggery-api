@@ -8,6 +8,7 @@ authors = [
 ]
 dynamic = ["version"]
 dependencies = [
+    "aenum>=3.1.16",
     "hatchling>=1.27.0",
 ]
 

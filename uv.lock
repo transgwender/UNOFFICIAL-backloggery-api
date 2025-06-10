@@ -3,14 +3,26 @@ revision = 2
 requires-python = ">=3.13"
 
 [[package]]
+name = "aenum"
+version = "3.1.16"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e3/52/6ad8f63ec8da1bf40f96996d25d5b650fdd38f5975f8c813732c47388f18/aenum-3.1.16-py3-none-any.whl", hash = "sha256:9035092855a98e41b66e3d0998bd7b96280e85ceb3a04cc035636138a1943eaf", size = 165627, upload-time = "2025-04-25T03:17:58.89Z" },
+]
+
+[[package]]
 name = "backloggery"
 source = { editable = "." }
 dependencies = [
+    { name = "aenum" },
     { name = "hatchling" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "hatchling", specifier = ">=1.27.0" }]
+requires-dist = [
+    { name = "aenum", specifier = ">=3.1.16" },
+    { name = "hatchling", specifier = ">=1.27.0" },
+]
 
 [[package]]
 name = "hatchling"
