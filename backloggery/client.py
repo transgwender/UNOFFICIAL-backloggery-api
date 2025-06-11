@@ -24,7 +24,7 @@ DEALINGS IN THE SOFTWARE.
 
 import json
 import re
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, Any, List
 from urllib import request
 
@@ -141,7 +141,7 @@ def fetch_library(username: str) -> LibraryCache:
     if not decoded:
         raise NoDataFoundError(f'No Data Found for {username}')
     result = decoded['payload']
-    gc = LibraryCache(datetime.now(), [Game(**dct) for dct in result])
+    gc = LibraryCache(datetime.now(UTC), [Game(**dct) for dct in result])
     return gc
 
 
