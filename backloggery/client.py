@@ -22,16 +22,15 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-import datetime
 import json
 import re
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, List
 from urllib import request
-from urllib.error import HTTPError
 
 import backloggery
 from backloggery.enums import *
+
 
 class NoDataFoundError(LookupError):
     """ No data found during lookup. """
@@ -142,13 +141,13 @@ def fetch_library(username: str) -> LibraryCache:
     if not decoded:
         raise NoDataFoundError(f'No Data Found for {username}')
     result = decoded['payload']
-    gc = LibraryCache(datetime.datetime.now(), [Game(**dct) for dct in result])
+    gc = LibraryCache(datetime.now(), [Game(**dct) for dct in result])
     return gc
 
 
 class BacklogClient:
     """
-    Client to interact with Backlogger API.
+    Client to interact with Backloggery API.
     """
     def __init__(self) -> None:
         self.cache: Dict[str, LibraryCache] = {}
