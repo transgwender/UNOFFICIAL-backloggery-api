@@ -1,10 +1,10 @@
 from aenum import Enum, MultiValue
 
-def cast[T](enum_type: type[T], val: None | int) -> str:
+def cast[T](enum_type: type[T], val: None | int) -> type[T]:
     if val is None:
-        return ""
+        return None
     else:
-        return str(enum_type(val))
+        return enum_type(val)
 
 class GameEnum(Enum):
     _init_ = 'value full'
